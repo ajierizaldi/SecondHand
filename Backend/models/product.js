@@ -11,6 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasOne(models.cart);
+      this.hasOne(models.orderItem);
+      this.belongsTo(models.category);
+      this.belongsTo(models.user, {
+        foreignKey: 'userId',
+        as: 'seller'
+      });
+      this.belongsTo(models.user, {
+        foreignKey: 'soldTo',
+        as: 'buyer'
+      });
+      this.hasMany(models.productImage);
+      this.hasMany(models.offer, {
+        foreignKey: 'productId'
+      });
     }
   }
   product.init({
@@ -21,9 +36,15 @@ module.exports = (sequelize, DataTypes) => {
     createdBy: DataTypes.INTEGER,
     soldTo: DataTypes.INTEGER,
     soldPrice: DataTypes.INTEGER,
-    isSold: DataTypes.BOOLEAN,
+    isSold: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     soldAt: DataTypes.DATE,
-    isAvailable: DataTypes.BOOLEAN
+    isAvailable: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    }
   }, {
     sequelize,
     modelName: 'product',
