@@ -126,7 +126,31 @@ module.exports = {
     // delete category
     destroy: async (req, res) => {
         try {
+            const categoryId = req.params.id
+            const getCategory = await models.Category.findOne({
+                where: {
+                    id: categoryId,
+                },
+            })
 
+            // if data is not found
+            if (!getCategory) throw new Error('Category not found');
+
+            await models.Category.destroy({
+                where: {
+                    id: categoryId
+                }
+            })
+
+            // if id is not found
+            if (!category) throw new Error('Category not found');
+
+            return res.status(200).json({
+                message: 'Category deleted successfully',
+                data: null,
+                success: true,
+                error: 0
+            })
         } catch (error) {
             return res.status(500).json({
                 message: 'Something went wrong',
