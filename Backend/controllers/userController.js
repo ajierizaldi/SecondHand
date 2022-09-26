@@ -33,9 +33,35 @@ module.exports = {
                 success: false
             })
         }
-    }
+    },
+
 
     // login user
+    login: async (req, res) => {
+        try {
+            const alertAccount = "Invalid Username or Password";
+
+            // STEP 1 : check if email exists
+            const emailExist = await models.User.findOne({
+                where: {
+                    email: req.body.email
+                }
+            })
+
+            // if email does not exist
+            if (!emailExist) throw new Error(alertAccount);
+
+
+
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Something went wrong',
+                error: error.message,
+                data: null,
+                success: false
+            })
+        }
+    }
     // update user
     // delete user
 }
